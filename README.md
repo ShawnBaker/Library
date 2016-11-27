@@ -2,7 +2,7 @@
 
 This library contains some useful Android code and a corresponding test program. It includes:
 
-ZoomPanTextureView - a texture view that supports zooming and panning gestures.
+__ZoomPanTextureView__ - a texture view that supports zooming and panning gestures.
 
 ## Copyright and License
 
