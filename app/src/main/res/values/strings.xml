@@ -1,3 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright © 2016-2017 Shawn Baker using the MIT License. -->
 <resources>
-    <string name="app_name">TestLibrary</string>
+    <string name="app_name">Test Library</string>
+    <string name="email">Email</string>
+    <string name="email_address">somebody@somewhere.com</string>
+    <string name="file_1">File 1</string>
+    <string name="file_2">File 2</string>
+    <string name="file_provider">ca.frozen.testlibrary.fileprovider</string>
+    <string name="log_files">Log Files</string>
+    <string name="no_file_1">Log file 1 doesn\'t exist.</string>
+    <string name="no_file_2">Log file 2 doesn\'t exist.</string>
 </resources>

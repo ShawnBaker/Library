@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright © 2016-2017 Shawn Baker using the MIT License. -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:background="@android:color/black"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ca.frozen.testlibrary.MainActivity">
+    tools:context=".MainActivity">
 
     <ca.frozen.library.views.ZoomPanTextureView
         android:id="@+id/zoom_pan_texture_view"

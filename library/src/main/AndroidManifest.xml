@@ -1,10 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright © 2016-2017 Shawn Baker using the MIT License. -->
 <manifest package="ca.frozen.library"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application android:allowBackup="true"
                  android:supportsRtl="true"
-    >
-
-    </application>
+    />
 
 </manifest>

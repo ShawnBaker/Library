@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright © 2016-2017 Shawn Baker using the MIT License. -->
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#5069E5</color>
+    <color name="colorPrimaryDark">#2C3A89</color>
     <color name="colorAccent">#FF4081</color>
 </resources>
