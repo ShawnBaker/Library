@@ -11,7 +11,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class LogFile
+public final class LogFile
 {
 	// instance variables
 	private String tag = null;
@@ -24,7 +24,7 @@ public class LogFile
 	//******************************************************************************
 	// LogFile
 	//******************************************************************************
-	public LogFile(Context context, String tag, String baseFileName)
+	public static void LogFile(Context context, String tag, String baseFileName)
 	{
 		// save the tag
 		this.tag = tag;
