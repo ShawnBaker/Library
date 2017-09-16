@@ -3,7 +3,7 @@
 This library contains some useful Android code and a corresponding test program. It includes:
 
 * __ZoomPanTextureView__ - a texture view that supports zooming and panning gestures.
-* __LogFile__ - maintains two rolling log files in the app's files/logs directory.
+* __Log__ - maintains two rolling log files in the app's files/logs directory.
 
 ## Copyright and License
 
