@@ -11,85 +11,134 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public final class LogFile
+public final class Log
 {
 	// instance variables
-	private String tag = null;
-	private LogLevel level = LogLevel.Debug;
-	private int maxFileSize = 1024 * 1024;
-	private File file1, file2, currFile;
-	private FileWriter fOut;
-	private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private static String tag = null;
+	private static LogLevel level = LogLevel.Debug;
+	private static int maxFileSize = 1024 * 1024;
+	private static File file1 = null;
+	private static File file2 = null;
+	private static File currFile = null;
+	private static FileWriter fOut = null;
+	private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	//******************************************************************************
-	// LogFile
+	// init
 	//******************************************************************************
-	public static void LogFile(Context context, String tag, String baseFileName)
+	public synchronized static void init(Context context, String tag, String baseFileName)
 	{
 		// save the tag
-		this.tag = tag;
+		Log.tag = tag;
 
-		// get the path to the files directory
-		File dir = new File(context.getFilesDir(), "logs");
-		if (!dir.exists())
+		if (fOut == null)
 		{
-			dir.mkdirs();
-		}
-
-		// get the two log files
-		file1 = new File(dir, baseFileName + "1.log");
-		long file1Time = file1.exists() ? file1.lastModified() : 0;
-		file2 = new File(dir, baseFileName + "2.log");
-		long file2Time = file2.exists() ? file2.lastModified() : 0;
-
-		// open or create the current log file
-		try
-		{
-			currFile = (file1Time >= file2Time) ? file1 : file2;
-			if (!currFile.exists())
+			// get the path to the files directory
+			File dir = new File(context.getFilesDir(), "logs");
+			if (!dir.exists())
 			{
-				currFile.createNewFile();
+				dir.mkdirs();
 			}
-			fOut = new FileWriter(currFile, true);
-		}
-		catch (FileNotFoundException ex)
-		{
-			fOut = null;
-		}
-		catch (IOException ex)
-		{
-			fOut = null;
+
+			// get the two log files
+			file1 = new File(dir, baseFileName + "1.log");
+			long file1Time = file1.exists() ? file1.lastModified() : 0;
+			file2 = new File(dir, baseFileName + "2.log");
+			long file2Time = file2.exists() ? file2.lastModified() : 0;
+
+			// open or create the current log file
+			try
+			{
+				currFile = (file1Time >= file2Time) ? file1 : file2;
+				if (!currFile.exists())
+				{
+					currFile.createNewFile();
+				}
+				fOut = new FileWriter(currFile, true);
+			}
+			catch (FileNotFoundException ex)
+			{
+				fOut = null;
+			}
+			catch (IOException ex)
+			{
+				fOut = null;
+			}
 		}
 	}
 
 	//******************************************************************************
-	// LogFile
+	// init
 	//******************************************************************************
-	public LogFile(Context context, String baseFileName)
+	public static void init(Context context, String baseFileName)
 	{
-		this(context, null, baseFileName);
+		init(context, null, baseFileName);
 	}
 
 	//******************************************************************************
-	// getLogLevel
+	// clear
 	//******************************************************************************
-	public LogLevel getLogLevel()
+	public synchronized static void clear()
+	{
+		if (fOut != null)
+		{
+			try
+			{
+				fOut.close();
+				if (file1.exists())
+				{
+					file1.delete();
+				}
+				if (file2.exists())
+				{
+					file2.delete();
+				}
+				currFile = file1;
+				currFile.createNewFile();
+				fOut = new FileWriter(currFile);
+			}
+			catch (IOException ex)
+			{
+			}
+		}
+	}
+
+	//******************************************************************************
+	// getLevel
+	//******************************************************************************
+	public static LogLevel getLevel()
 	{
 		return level;
 	}
 
 	//******************************************************************************
-	// setLogLevel
+	// setLevel
 	//******************************************************************************
-	public void setLogLevel(LogLevel level)
+	public static void setLevel(LogLevel level)
 	{
-		this.level = level;
+		Log.level = level;
+	}
+
+	//******************************************************************************
+	// getMaxFileSize
+	//******************************************************************************
+	public static int getMaxFileSize()
+	{
+		return maxFileSize;
+	}
+
+	//******************************************************************************
+	// setMaxFileSize
+	//******************************************************************************
+	public static void setMaxFileSize(int maxFileSize)
+	{
+		Log.maxFileSize = maxFileSize;
 	}
 
 	//******************************************************************************
 	// getFile1
 	//******************************************************************************
-	public File getFile1()
+	public static File getFile1()
 	{
 		return file1;
 	}
@@ -97,7 +146,7 @@ public final class LogFile
 	//******************************************************************************
 	// getFile2
 	//******************************************************************************
-	public File getFile2()
+	public static File getFile2()
 	{
 		return file2;
 	}
@@ -105,11 +154,11 @@ public final class LogFile
 	//******************************************************************************
 	// write
 	//******************************************************************************
-	public void write(LogLevel level, String message)
+	public synchronized static void write(LogLevel level, String message)
 	{
 		try
 		{
-			if (fOut != null && level.ordinal() <= this.level.ordinal())
+			if (fOut != null && level.ordinal() <= Log.level.ordinal())
 			{
 				// switch files if the current one is full
 				if (currFile.length() >= maxFileSize)
@@ -125,7 +174,7 @@ public final class LogFile
 				}
 
 				// write the log message
-				String msg = dateFormat.format(Calendar.getInstance().getTime()) + " - ";
+				String msg = dateFormat.format(Calendar.getInstance().getTime()) + " - " + level.name() + " - ";
 				if (tag != null)
 				{
 					msg += tag + " - ";
@@ -137,13 +186,14 @@ public final class LogFile
 		}
 		catch (IOException ex)
 		{
+			android.util.Log.d("write", ex.toString());
 		}
 	}
 
 	//******************************************************************************
 	// debug
 	//******************************************************************************
-	public void debug(String message)
+	public static void debug(String message)
 	{
 		write(LogLevel.Debug, message);
 	}
@@ -151,7 +201,7 @@ public final class LogFile
 	//******************************************************************************
 	// info
 	//******************************************************************************
-	public void info(String message)
+	public static void info(String message)
 	{
 		write(LogLevel.Info, message);
 	}
@@ -159,7 +209,7 @@ public final class LogFile
 	//******************************************************************************
 	// warning
 	//******************************************************************************
-	public void warning(String message)
+	public static void warning(String message)
 	{
 		write(LogLevel.Warning, message);
 	}
@@ -167,7 +217,7 @@ public final class LogFile
 	//******************************************************************************
 	// error
 	//******************************************************************************
-	public void error(String message)
+	public static void error(String message)
 	{
 		write(LogLevel.Error, message);
 	}
@@ -175,7 +225,7 @@ public final class LogFile
 	//******************************************************************************
 	// fatal
 	//******************************************************************************
-	public void fatal(String message)
+	public static void fatal(String message)
 	{
 		write(LogLevel.Fatal, message);
 	}
@@ -185,7 +235,6 @@ public final class LogFile
 	//******************************************************************************
 	public enum LogLevel
 	{
-		Off,
 		Fatal,
 		Error,
 		Warning,

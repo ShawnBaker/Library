@@ -13,14 +13,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.TextureView;
 
-import ca.frozen.library.classes.LogFile;
+import ca.frozen.library.classes.Log;
 import ca.frozen.library.views.ZoomPanTextureView;
 
 public class MainActivity extends AppCompatActivity implements TextureView.SurfaceTextureListener
 {
     private Menu mainMenu = null;
     private ZoomPanTextureView textureView;
-    private LogFile log;
 
     //******************************************************************************
     // onCreate
@@ -31,11 +30,12 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        log = new LogFile(this, "MainActivity", "TestLib");
-        log.info("onCreate");
+		// initialize the log file
+        Log.init(this, "MainActivity", "TestLib");
+        Log.info("onCreate");
 
         // set the texture listener
-        log.info("create ZoomPanTextureView");
+        Log.info("create ZoomPanTextureView");
         textureView = (ZoomPanTextureView)findViewById(R.id.zoom_pan_texture_view);
         textureView.setSurfaceTextureListener(this);
     }
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int width, int height)
     {
-        log.info("onSurfaceTextureAvailable");
+        Log.info("onSurfaceTextureAvailable");
         Canvas canvas = textureView.lockCanvas();
         Rect dst = new Rect(0, 0, textureView.getWidth(), textureView.getHeight());
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.house);

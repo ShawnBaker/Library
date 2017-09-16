@@ -2,12 +2,16 @@
 <!-- Copyright © 2016-2017 Shawn Baker using the MIT License. -->
 <resources>
     <string name="app_name">Test Library</string>
+    <string name="clear">Clear</string>
     <string name="email">Email</string>
     <string name="email_address">somebody@somewhere.com</string>
     <string name="file_1">File 1</string>
     <string name="file_2">File 2</string>
     <string name="file_provider">ca.frozen.testlibrary.fileprovider</string>
     <string name="log_files">Log Files</string>
+    <string name="no">No</string>
     <string name="no_file_1">Log file 1 doesn\'t exist.</string>
     <string name="no_file_2">Log file 2 doesn\'t exist.</string>
+    <string name="ok_to_clear_logs">Are you sure you want to delete the contents of the log files?</string>
+    <string name="yes">Yes</string>
 </resources>
